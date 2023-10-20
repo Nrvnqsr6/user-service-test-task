@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>
+    History Service
+  </title>
+  <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+</head>
+
+<body style="text-align: center;">
+  <div class="container">
+    <div class="row" style="margin-top: 20px;">
+      <div style="text-align: center;">
+        <div class="col-lg-12">
+          <div class="caption">
+            <h1>История действий с пользователями</h1>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row" style="margin-bottom: 30px; ">
+        <div style="text-align: center;">
+  
+          <div class="caption">
+            <form action="/actions" method="get">
+              <input type="hidden" name="page" id="page" value="1">
+              <div class="form-group col-lg-12">
+                <div class="col-lg-5" style="display: flex;">
+                  <label for="sel1" style="margin-top: 5px; margin-right: 5px;">Поиск по User ID: </label>
+                  <input class="form-control" type="text" name="user_id" value="<%= user_id %>" style="width: 100px !important;">
+                </div>  
+  
+                <div class="col-lg-3" style="display: flex;">
+                  <label for="sel1" style="margin-top: 5px; margin-right: 5px;">Выводить:</label>
+                  <input class="form-control" type="number" min="1" step="1" value="<%= perPagePrint %>" name="perPage"
+                    style="width: 100px !important;">
+                </div>
+                <div class="col-lg-1" style="float: right;">
+                  <input class="btn btn-success btn-sm" type="submit" id="submit">
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+    <div class="row">
+
+      <div class="col-lg-12">
+        <div class="thumbnail">
+          <div class="caption">
+            <table class="table table-hover table-dark">
+              <thead>
+                <tr class="bg-primary">
+                  <td scope="col">ID
+                  </td>
+                  <td scope="col">User ID
+                  </td>
+                  <td scope="col">Action Type
+                  </td>
+                  <td scope="col">Created At
+                </tr>
+              </thead>
+              <% for (var i=0; i < toShow; i++) { %>
+                <tbody>
+                  <tr>
+                    <td>
+                      <%= actions[i].id %>
+                    </td>
+                    <td>
+                      <%= actions[i].user_id %>
+                    </td>
+                    <td>
+                      <%= actions[i].action_type %>
+                    </td>
+                    <td>
+                      <%= dayjs(actions[i].createdAt) %>
+                    </td>
+                        </tr>
+                    </tbody>
+                    <% } %>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<% if (pages > 0) { %>
+<ul class="pagination text-center">
+    <% if (current == 1) { %>
+    <li class="disabled"><a>First</a></li>
+    <% } else { %>
+    <li ><a href="#" id="First" onclick="First(1)">First</a></li>
+    <% } %>
+
+    <% if (Number(current) - 1 > 0) { %>
+    <li><a href="#" onclick="First(<%= Number(current) - 1 %>)">Prev</a></li>
+    <% } else { %>
+    <li class="disabled"><a>Prev</a></li>
+    <% } %>
+
+    <% var i = (Number(current) > 5 ? Number(current) - 4 : 1) %>
+
+    <% if (i !== 1) { %>
+    <li class="disabled"><a>...</a></li>
+    <% } %>
+
+    <% for (; i <= (Number(current) + 4) && i <= pages; i++) { %>
+
+    <% if (i == current) { %>
+    <li class="active"><a><%= i %></a></li>
+    <% } else { %>
+    <li id="pages"><a href="#" onclick="First(<%= i %>)" ><%= i %></a></li>
+    <% } %>
+
+    <% if (i == Number(current) + 4 && i < pages) { %>
+    <li class="disabled"><a>...</a></li>
+    <% } %>
+    <% } %>
+
+    <% if (Number(current) + 1 <= pages) { %>
+    <li><a href="#" onclick="First(<%= Number(current) + 1 %>)">Next</a></li>
+    <% } else { %>
+    <li class="disabled"><a>Next</a></li>
+    <% } %>
+
+    <% if (current == pages) { %>
+    <li class="disabled"><a>Last</a></li>
+    <% } else { %>
+    <li><a href="#" onclick="First(<%=pages%>)">Last</a></li>
+    <% } %>
+</ul>
+<% } %>
+</div>
+</body>
+<script type="text/javascript">
+  function First(p) {
+    document.getElementById("page").value = p;
+    let button = document.getElementById('submit'); 
+    button.click();
+  }</script>
+    
+</html>
