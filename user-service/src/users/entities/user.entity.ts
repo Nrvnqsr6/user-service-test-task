@@ -5,7 +5,7 @@ import { AllowNull, Column, DataType, Model, Table, Unique } from 'sequelize-typ
     timestamps: false,
     tableName: 'users',
 })
-export class User extends Model<User> {
+export class User extends Model {
     @Unique
     @AllowNull(false)
     @Column(DataType.STRING)
